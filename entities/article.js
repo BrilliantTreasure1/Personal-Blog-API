@@ -8,10 +8,10 @@ class Article{
     }
 
     validate() {
-        if (!this.topic) { throw new Error('تاپیک وجود ندارد') };
-        if (!this.content) { throw new Error('محتوا وجود ندارد') };
-        if (!this.author) { throw new Error('نویسنده وجود ندارد') };
-        if (!this.date) { throw new Error('تاریخ نامعتبر') };
+        if (!this.topic?.trim()) { throw new Error('تاپیک وجود ندارد') };
+        if (!this.content?.trim()) { throw new Error('محتوا وجود ندارد') };
+        if (!this.author?.trim()) { throw new Error('نویسنده وجود ندارد') };
+        if (!this.date?.trim()) { throw new Error('تاریخ نامعتبر') };
     }
 }
 
