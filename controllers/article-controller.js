@@ -1,6 +1,6 @@
 // src/controllers/UserController.js
 const CreateArticle = require('../usecases/create-article');
-const ArticleRepository= require('../repositories/article-repository.log');
+const ArticleRepository= require('../repositories/json/article-repository');
 
 const createArticle = new CreateArticle(new ArticleRepository());
 
