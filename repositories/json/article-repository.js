@@ -118,6 +118,19 @@ async findById(id) {
   return article || null;
 }
 
+async findAll() {
+  try {
+    const data = await fs.readFile(DATA_FILE, 'utf8');
+    const articles = JSON.parse(data);
+    return articles;
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      return []; 
+    }
+    throw err;
+  }
+}
+
 }
 
 module.exports = ArticleRepository;
