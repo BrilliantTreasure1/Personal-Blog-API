@@ -2,11 +2,13 @@
 const CreateArticle = require('../use-cases/create-article');
 const DeleteArticle = require('../use-cases/delete-article');
 const UpdateArticle = require('../use-cases/update-article');
+const GetArticleById = require('../use-cases/get-article-by-id');
 const ArticleRepository= require('../repositories/json/article-repository');
 
 const createArticle = new CreateArticle(new ArticleRepository());
 const deleteArticle = new DeleteArticle(new ArticleRepository());
 const updateArticle = new UpdateArticle(new ArticleRepository());
+const getArticleById = new GetArticleById(new ArticleRepository());
 
 module.exports = {
   async create(req, res) {
@@ -47,6 +49,21 @@ module.exports = {
     });
 
     res.status(200).json(updatedArticle);
+  } catch (err) {
+    if (err.message.includes('not found')) {
+      res.status(404).json({ error: err.message });
+    } else {
+      res.status(400).json({ error: err.message });
+    }
+  }
+},
+
+async getById(req, res) {
+  const { id } = req.params;
+
+  try {
+    const article = await getArticleById.execute({ id });
+    res.status(200).json(article);
   } catch (err) {
     if (err.message.includes('not found')) {
       res.status(404).json({ error: err.message });

@@ -7,6 +7,7 @@ app.use(express.json());
 app.post('/articles', articleController.create);
 app.delete('/articles/:id', articleController.remove);
 app.put('/articles/:id', articleController.update);
+app.get('/articles/:id', articleController.getById);
 
 
 app.listen(3000, () => console.log('Server running'));
