@@ -101,6 +101,23 @@ async deleteById(id) {
   return updatedArticle;
 }
 
+async findById(id) {
+  let articles = [];
+
+  try {
+    const data = await fs.readFile(DATA_FILE, 'utf8');
+    articles = JSON.parse(data);
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      return null; 
+    }
+    throw err;
+  }
+
+  const article = articles.find(a => a.id === id);
+  return article || null;
+}
+
 }
 
 module.exports = ArticleRepository;
