@@ -69,6 +69,38 @@ async deleteById(id) {
 
     return deletedArticle;
   }
+
+  async updateById(id, updates) {
+  let articles = [];
+
+  try {
+    const data = await fs.readFile(DATA_FILE, 'utf8');
+    articles = JSON.parse(data);
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      throw new Error('No articles exist yet');
+    }
+    throw err;
+  }
+
+  const articleIndex = articles.findIndex(a => a.id === id);
+  if (articleIndex === -1) {
+    throw new Error('Article with this ID not found');
+  }
+
+  const updatedArticle = {
+    ...articles[articleIndex],
+    ...updates,
+    updatedAt: new Date().toISOString(), 
+  };
+
+  articles[articleIndex] = updatedArticle;
+
+  await fs.writeFile(DATA_FILE, JSON.stringify(articles, null, 2), 'utf8');
+
+  return updatedArticle;
+}
+
 }
 
 module.exports = ArticleRepository;
