@@ -1,11 +1,12 @@
 const express = require('express');
-const ArticleController = require('./controllers/article-controller');
+const articleController = require('./controllers/article-controller');
 
 const app = express();
 app.use(express.json());
 
-app.post('/articles', ArticleController.create);
-app.delete('/articles/:id', ArticleController.remove);
+app.post('/articles', articleController.create);
+app.delete('/articles/:id', articleController.remove);
+app.put('/articles/:id', articleController.update);
 
 
 app.listen(3000, () => console.log('Server running'));

@@ -1,10 +1,12 @@
 // src/controllers/article-controller.js
 const CreateArticle = require('../use-cases/create-article');
 const DeleteArticle = require('../use-cases/delete-article');
+const UpdateArticle = require('../use-cases/update-article');
 const ArticleRepository= require('../repositories/json/article-repository');
 
 const createArticle = new CreateArticle(new ArticleRepository());
 const deleteArticle = new DeleteArticle(new ArticleRepository());
+const updateArticle = new UpdateArticle(new ArticleRepository());
 
 module.exports = {
   async create(req, res) {
@@ -29,5 +31,29 @@ module.exports = {
         res.status(400).json({ error: err.message });
       }
     }
+  },
+
+  async update(req, res) {
+  const { id } = req.params;
+  const { topic, content, author, date } = req.body;
+
+  try {
+    const updatedArticle = await updateArticle.execute({
+      id,
+      topic,
+      content,
+      author,
+      date,
+    });
+
+    res.status(200).json(updatedArticle);
+  } catch (err) {
+    if (err.message.includes('not found')) {
+      res.status(404).json({ error: err.message });
+    } else {
+      res.status(400).json({ error: err.message });
+    }
   }
+}
+
 };
