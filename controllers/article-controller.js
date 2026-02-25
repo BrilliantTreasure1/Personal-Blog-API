@@ -3,12 +3,14 @@ const CreateArticle = require('../use-cases/create-article');
 const DeleteArticle = require('../use-cases/delete-article');
 const UpdateArticle = require('../use-cases/update-article');
 const GetArticleById = require('../use-cases/get-article-by-id');
+const GetAllArticles = require('../use-cases/get-all-articles');
 const ArticleRepository= require('../repositories/json/article-repository');
 
 const createArticle = new CreateArticle(new ArticleRepository());
 const deleteArticle = new DeleteArticle(new ArticleRepository());
 const updateArticle = new UpdateArticle(new ArticleRepository());
 const getArticleById = new GetArticleById(new ArticleRepository());
+const getAllArticles = new GetAllArticles(new ArticleRepository());
 
 module.exports = {
   async create(req, res) {
@@ -70,6 +72,18 @@ async getById(req, res) {
     } else {
       res.status(400).json({ error: err.message });
     }
+  }
+},
+
+async list(req, res) {
+  try {
+
+    const articles = await getAllArticles.execute();
+
+    res.status(200).json(articles);
+  } catch (err) {
+    console.error('Error fetching articles:', err);
+    res.status(500).json({ error: 'Failed to fetch articles' });
   }
 }
 
