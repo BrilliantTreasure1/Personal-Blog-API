@@ -4,7 +4,7 @@ const DeleteArticle = require('../use-cases/delete-article');
 const UpdateArticle = require('../use-cases/update-article');
 const GetArticleById = require('../use-cases/get-article-by-id');
 const GetAllArticles = require('../use-cases/get-all-articles');
-const ArticleRepository= require('../repositories/json/article-repository');
+const ArticleRepository= require('../repositories/mongodb/article-repository');
 
 const createArticle = new CreateArticle(new ArticleRepository());
 const deleteArticle = new DeleteArticle(new ArticleRepository());
