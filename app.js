@@ -1,5 +1,6 @@
 const express = require('express');
 const articleController = require('./controllers/article-controller');
+const connectDB = require('./config/db');
 
 const app = express();
 app.use(express.json());
@@ -11,4 +12,13 @@ app.get('/articles/:id', articleController.getById);
 app.get('/articles', articleController.list);
 
 
-app.listen(3000, () => console.log('Server running'));
+connectDB()
+  .then(() => {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Failed to start server due to DB connection error');
+  });
