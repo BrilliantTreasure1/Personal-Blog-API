@@ -77,12 +77,14 @@ async getById(req, res) {
 
 async list(req, res) {
  try {
-    const { page, limit, sort } = req.query;
+    const { page, limit, sort , topic, author } = req.query;
 
     const result = await getAllArticles.execute({
       page,
       limit,
       sort,
+      topic, 
+      author
     });
 
     res.status(200).json(result);

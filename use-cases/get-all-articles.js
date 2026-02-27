@@ -3,15 +3,20 @@ class GetAllArticlesUseCase {
     this.articleRepository = articleRepository;
   }
 
-  async execute({ page = 1, limit = 10, sort = 'date-desc' } = {}) {
+  async execute({ page = 1, limit = 10, sort = 'date-desc' , topic, author } = {}) {
    
     const pageNum = Math.max(1, parseInt(page));
     const limitNum = Math.min(50, Math.max(1, parseInt(limit))); //max 50
+
+    const filter = {};
+    if (topic) filter.topic = topic.trim();
+    if (author) filter.author = author.trim();
 
     const articles = await this.articleRepository.findAllPaginated({
       page: pageNum,
       limit: limitNum,
       sort,
+      filter,
     });
 
     const total = await this.articleRepository.totalCountOfArticles();

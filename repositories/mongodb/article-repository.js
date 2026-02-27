@@ -26,8 +26,16 @@ class ArticleRepository {
     return await Article.findByIdAndDelete(id);
   }
 
-  async findAllPaginated({ page = 1, limit = 10, sort = 'date-desc' } = {}) {
+  async findAllPaginated({ page = 1, limit = 10, sort = 'date-desc' , filter = {} } = {}) {
     const query = Article.find();
+
+  // filtering  
+  if (filter.topic) {
+    query.where('topic').regex(new RegExp(filter.topic, 'i')); // case-insensitive search
+  }
+  if (filter.author) {
+    query.where('author').regex(new RegExp(filter.author, 'i'));
+  }  
 
   // sorting
   if (sort === 'date-asc') {
@@ -43,9 +51,18 @@ class ArticleRepository {
   return await query.exec();
 }
 
-  async totalCountOfArticles() {
-   return await Article.countDocuments();
- }
+  async totalCountOfArticles(filter = {}) {
+    const query = Article.find();
+
+   if (filter.topic) {
+     query.where('topic').regex(new RegExp(filter.topic, 'i'));
+   }
+    if (filter.author) {
+      query.where('author').regex(new RegExp(filter.author, 'i'));
+   }
+
+    return await query.countDocuments();
+}
 }
 
 module.exports = ArticleRepository;
