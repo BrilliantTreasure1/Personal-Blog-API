@@ -76,11 +76,16 @@ async getById(req, res) {
 },
 
 async list(req, res) {
-  try {
+ try {
+    const { page, limit, sort } = req.query;
 
-    const articles = await getAllArticles.execute();
+    const result = await getAllArticles.execute({
+      page,
+      limit,
+      sort,
+    });
 
-    res.status(200).json(articles);
+    res.status(200).json(result);
   } catch (err) {
     console.error('Error fetching articles:', err);
     res.status(500).json({ error: 'Failed to fetch articles' });
